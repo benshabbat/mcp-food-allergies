@@ -1,139 +1,139 @@
-// מערכת MCP לתחלופת אלרגנים במנות
-// Model Context Protocol לניהול מנות ואלרגנים
+// MCP System for Food Allergen Substitutions
+// Model Context Protocol for managing dishes and allergens
 
-// מאגר אלרגנים נפוצים וחלופות מומלצות
+// Database of common allergens and recommended substitutions
 const allergensDatabase = {
-  // אלרגנים מבוססי חלבון
-  "חלב פרה": {
-    category: "חלב",
-    alternatives: ["חלב שקדים", "חלב סויה", "חלב קוקוס", "חלב שיבולת שועל", "חלב אורז"],
-    proteinContent: "גבוה",
-    notes: "חלב קוקוס עשיר יותר בשומן ומתאים יותר למנות מתוקות וקרמיות"
+  // Protein-based allergens
+  "cow milk": {
+    category: "dairy",
+    alternatives: ["almond milk", "soy milk", "coconut milk", "oat milk", "rice milk"],
+    proteinContent: "high",
+    notes: "Coconut milk is richer in fat and better suited for sweet and creamy dishes"
   },
-  "גבינה": {
-    category: "חלב",
-    alternatives: ["גבינת סויה", "גבינת קשיו", "גבינת שקדים", "גבינת קוקוס"],
-    proteinContent: "גבוה",
-    notes: "גבינות קשיו וסויה טובות למרקמים דומים לגבינות רכות"
+  "cheese": {
+    category: "dairy",
+    alternatives: ["soy cheese", "cashew cheese", "almond cheese", "coconut cheese"],
+    proteinContent: "high",
+    notes: "Cashew and soy cheeses are good for textures similar to soft cheeses"
   },
-  "יוגורט": {
-    category: "חלב",
-    alternatives: ["יוגורט סויה", "יוגורט קוקוס", "יוגורט שקדים"],
-    proteinContent: "בינוני",
-    notes: "יוגורט קוקוס מתאים למנות מתוקות, יוגורט סויה מתאים יותר למנות מלוחות"
-  },
-  
-  // אלרגנים מבוססי גלוטן
-  "קמח חיטה": {
-    category: "גלוטן",
-    alternatives: ["קמח אורז", "קמח תירס", "קמח כוסמת", "קמח קוקוס", "קמח שקדים", "קמח טפיוקה"],
-    proteinContent: "בינוני",
-    notes: "לאפייה מומלץ לשלב מספר קמחים ללא גלוטן"
-  },
-  "פסטה": {
-    category: "גלוטן",
-    alternatives: ["פסטה אורז", "פסטה תירס", "פסטה עדשים", "פסטה קינואה", "אטריות זכוכית"],
-    proteinContent: "בינוני",
-    notes: "פסטת עדשים וקינואה מספקות יותר חלבון מפסטת אורז או תירס"
-  },
-  "קוסקוס": {
-    category: "גלוטן",
-    alternatives: ["קינואה", "כוסמת", "אורז", "תירס"],
-    proteinContent: "בינוני",
-    notes: "קינואה היא חלופה טובה מבחינת מרקם וערך תזונתי"
+  "yogurt": {
+    category: "dairy",
+    alternatives: ["soy yogurt", "coconut yogurt", "almond yogurt"],
+    proteinContent: "medium",
+    notes: "Coconut yogurt is suitable for sweet dishes, soy yogurt is better for savory dishes"
   },
   
-  // אלרגנים מבוססי אגוזים
-  "בוטנים": {
-    category: "אגוזים",
-    alternatives: ["זרעי חמנייה", "זרעי דלעת", "טחינה", "אבוקדו"],
-    proteinContent: "גבוה",
-    notes: "מי שאלרגי לבוטנים לא בהכרח אלרגי לאגוזי עץ ולהפך"
+  // Gluten-based allergens
+  "wheat flour": {
+    category: "gluten",
+    alternatives: ["rice flour", "corn flour", "buckwheat flour", "coconut flour", "almond flour", "tapioca flour"],
+    proteinContent: "medium",
+    notes: "For baking, it's recommended to combine several gluten-free flours"
   },
-  "שקדים": {
-    category: "אגוזים",
-    alternatives: ["זרעי חמנייה", "זרעי דלעת", "זרעי פשתן", "שיבולת שועל"],
-    proteinContent: "גבוה",
-    notes: "שיבולת שועל טחונה יכולה להיות חלופה טובה למרקם של אבקת שקדים באפייה"
+  "pasta": {
+    category: "gluten",
+    alternatives: ["rice pasta", "corn pasta", "lentil pasta", "quinoa pasta", "glass noodles"],
+    proteinContent: "medium",
+    notes: "Lentil and quinoa pasta provide more protein than rice or corn pasta"
   },
-  
-  // אלרגנים מבוססי סויה
-  "סויה": {
-    category: "קטניות",
-    alternatives: ["חומוס", "עדשים", "שעועית", "טופו עשוי מחומוס"],
-    proteinContent: "גבוה",
-    notes: "טופו עשוי מחומוס (בופו) הוא חלופה טובה לטופו רגיל עבור אלרגיים לסויה"
+  "couscous": {
+    category: "gluten",
+    alternatives: ["quinoa", "buckwheat", "rice", "corn"],
+    proteinContent: "medium",
+    notes: "Quinoa is a good alternative in terms of texture and nutritional value"
   },
   
-  // אלרגנים מבוססי ביצים
-  "ביצים": {
-    category: "ביצים",
-    alternatives: ["תחליף ביצה מסחרי", "זרעי פשתן טחונים + מים", "מחית בננה", "טחינה + מים", "רסק תפוחים", "אקווה פאבה (מי חומוס)"],
-    proteinContent: "גבוה",
-    notes: "לאפייה: רבע כוס רסק תפוחים או מחית בננה = ביצה אחת; לקישור: כף זרעי פשתן + 3 כפות מים = ביצה אחת"
+  // Nut-based allergens
+  "peanuts": {
+    category: "nuts",
+    alternatives: ["sunflower seeds", "pumpkin seeds", "tahini", "avocado"],
+    proteinContent: "high",
+    notes: "Those allergic to peanuts are not necessarily allergic to tree nuts and vice versa"
+  },
+  "almonds": {
+    category: "nuts",
+    alternatives: ["sunflower seeds", "pumpkin seeds", "flax seeds", "oats"],
+    proteinContent: "high",
+    notes: "Ground oats can be a good alternative to the texture of almond powder in baking"
+  },
+  
+  // Soy-based allergens
+  "soy": {
+    category: "legumes",
+    alternatives: ["chickpeas", "lentils", "beans", "chickpea tofu"],
+    proteinContent: "high",
+    notes: "Chickpea tofu (bufu) is a good alternative to regular tofu for those allergic to soy"
+  },
+  
+  // Egg-based allergens
+  "eggs": {
+    category: "eggs",
+    alternatives: ["commercial egg replacer", "ground flax seeds + water", "mashed banana", "tahini + water", "applesauce", "aquafaba (chickpea water)"],
+    proteinContent: "high",
+    notes: "For baking: 1/4 cup applesauce or mashed banana = 1 egg; for binding: 1 tbsp flax seeds + 3 tbsp water = 1 egg"
   }
 };
 
-// מאגר מנות נפוצות והאלרגנים שהן מכילות
+// Database of common dishes and the allergens they contain
 const dishesDatabase = {
-  "פנקייק": {
-    ingredients: ["קמח חיטה", "ביצים", "חלב פרה"],
-    category: "מאפים",
-    difficulty: "קלה"
+  "pancake": {
+    ingredients: ["wheat flour", "eggs", "cow milk"],
+    category: "baked goods",
+    difficulty: "easy"
   },
-  "פסטה אלפרדו": {
-    ingredients: ["פסטה", "חלב פרה", "גבינה"],
-    category: "מנה עיקרית",
-    difficulty: "בינונית"
+  "alfredo pasta": {
+    ingredients: ["pasta", "cow milk", "cheese"],
+    category: "main course",
+    difficulty: "medium"
   },
-  "עוגת שוקולד": {
-    ingredients: ["קמח חיטה", "ביצים", "חלב פרה"],
-    category: "קינוחים",
-    difficulty: "בינונית"
+  "chocolate cake": {
+    ingredients: ["wheat flour", "eggs", "cow milk"],
+    category: "desserts",
+    difficulty: "medium"
   },
-  "פלאפל": {
-    ingredients: ["חומוס", "בוטנים"],
-    category: "מנה עיקרית",
-    difficulty: "בינונית",
-    notes: "לעתים מכיל בוטנים או טחינה - תלוי במתכון"
+  "falafel": {
+    ingredients: ["chickpeas", "peanuts"],
+    category: "main course",
+    difficulty: "medium",
+    notes: "Sometimes contains peanuts or tahini - depends on the recipe"
   },
-  "מוסלי": {
-    ingredients: ["שיבולת שועל", "חלב פרה", "שקדים", "אגוזים"],
-    category: "ארוחת בוקר",
-    difficulty: "קלה"
+  "muesli": {
+    ingredients: ["oats", "cow milk", "almonds", "nuts"],
+    category: "breakfast",
+    difficulty: "easy"
   },
-  "חביתה": {
-    ingredients: ["ביצים"],
-    category: "ארוחת בוקר",
-    difficulty: "קלה"
+  "omelet": {
+    ingredients: ["eggs"],
+    category: "breakfast",
+    difficulty: "easy"
   },
-  "חומוס": {
-    ingredients: ["חומוס", "טחינה"],
-    category: "מנה ראשונה",
-    difficulty: "בינונית"
+  "hummus": {
+    ingredients: ["chickpeas", "tahini"],
+    category: "appetizer",
+    difficulty: "medium"
   },
-  "בורקס גבינה": {
-    ingredients: ["קמח חיטה", "גבינה"],
-    category: "מאפים",
-    difficulty: "בינונית"
+  "cheese pastry": {
+    ingredients: ["wheat flour", "cheese"],
+    category: "baked goods",
+    difficulty: "medium"
   },
-  "פיצה": {
-    ingredients: ["קמח חיטה", "גבינה"],
-    category: "מנה עיקרית",
-    difficulty: "בינונית"
+  "pizza": {
+    ingredients: ["wheat flour", "cheese"],
+    category: "main course",
+    difficulty: "medium"
   },
-  "קוסקוס": {
-    ingredients: ["קוסקוס"],
-    category: "מנה עיקרית",
-    difficulty: "בינונית"
+  "couscous": {
+    ingredients: ["couscous"],
+    category: "main course",
+    difficulty: "medium"
   }
 };
 
-// פונקציה המחזירה רשימת אלרגנים ממנה מסוימת
+// Function that returns a list of allergens from a specific dish
 function getAllergensFromDish(dishName) {
   const dish = dishesDatabase[dishName];
   if (!dish) {
-    return { success: false, message: `המנה ${dishName} לא נמצאה במאגר` };
+    return { success: false, message: `Dish ${dishName} not found in the database` };
   }
   
   return {
@@ -145,11 +145,11 @@ function getAllergensFromDish(dishName) {
   };
 }
 
-// פונקציה המציעה חלופות לאלרגן מסוים
+// Function that suggests alternatives to a specific allergen
 function getAllergenAlternatives(allergen) {
   const allergenInfo = allergensDatabase[allergen];
   if (!allergenInfo) {
-    return { success: false, message: `האלרגן ${allergen} לא נמצא במאגר` };
+    return { success: false, message: `Allergen ${allergen} not found in the database` };
   }
   
   return {
@@ -161,11 +161,11 @@ function getAllergenAlternatives(allergen) {
   };
 }
 
-// פונקציה המציעה גרסה מותאמת של מנה ללא אלרגנים מסוימים
+// Function that suggests a customized version of a dish without specific allergens
 function getSafeRecipeAlternative(dishName, allergies) {
   const dish = dishesDatabase[dishName];
   if (!dish) {
-    return { success: false, message: `המנה ${dishName} לא נמצאה במאגר` };
+    return { success: false, message: `Dish ${dishName} not found in the database` };
   }
   
   const problematicIngredients = dish.ingredients.filter(ingredient => 
@@ -179,7 +179,7 @@ function getSafeRecipeAlternative(dishName, allergies) {
     return { 
       success: true, 
       dishName: dishName,
-      message: `המנה ${dishName} בטוחה לאכילה עבור האלרגיות שצוינו`,
+      message: `Dish ${dishName} is safe to eat for the specified allergies`,
       safeToEat: true
     };
   }
@@ -192,7 +192,7 @@ function getSafeRecipeAlternative(dishName, allergies) {
       alternatives[ingredient] = allergensDatabase[ingredient].alternatives;
     } else {
       allAlternativesFound = false;
-      alternatives[ingredient] = ["לא נמצאו חלופות"];
+      alternatives[ingredient] = ["No alternatives found"];
     }
   });
   
@@ -204,12 +204,12 @@ function getSafeRecipeAlternative(dishName, allergies) {
     alternatives: alternatives,
     allAlternativesFound: allAlternativesFound,
     message: allAlternativesFound ? 
-      `נמצאו חלופות לכל המרכיבים הבעייתיים ב${dishName}` : 
-      `לא נמצאו חלופות לחלק מהמרכיבים הבעייתיים ב${dishName}`
+      `Alternatives found for all problematic ingredients in ${dishName}` : 
+      `No alternatives found for some problematic ingredients in ${dishName}`
   };
 }
 
-// פונקציה המציעה מנות בטוחות על סמך רשימת אלרגיות
+// Function that suggests safe dishes based on a list of allergies
 function getSafeDishSuggestions(allergies) {
   const safeDishes = [];
   const potentiallyAdaptableDishes = [];
@@ -229,7 +229,7 @@ function getSafeDishSuggestions(allergies) {
         difficulty: dishInfo.difficulty
       });
     } else {
-      // בדיקה אם יש חלופות לכל המרכיבים הבעייתיים
+      // Check if there are alternatives for all problematic ingredients
       let allAlternativesFound = true;
       
       for (const ingredient of problematicIngredients) {
@@ -258,32 +258,32 @@ function getSafeDishSuggestions(allergies) {
   };
 }
 
-// הדגמת שימוש במערכת ה-MCP לאלרגנים
+// Demonstrating MCP system usage
 function demonstrateMCPUsage() {
-  // דוגמה 1: קבלת מידע על אלרגנים במנה
-  console.log("דוגמה 1: אלרגנים בפנקייק");
-  console.log(getAllergensFromDish("פנקייק"));
+  // Example 1: Getting allergen information for a dish
+  console.log("Example 1: Allergens in pancakes");
+  console.log(getAllergensFromDish("pancake"));
   console.log("\n");
   
-  // דוגמה 2: קבלת חלופות לאלרגן ספציפי
-  console.log("דוגמה 2: חלופות לחלב פרה");
-  console.log(getAllergenAlternatives("חלב פרה"));
+  // Example 2: Getting alternatives for a specific allergen
+  console.log("Example 2: Alternatives for cow milk");
+  console.log(getAllergenAlternatives("cow milk"));
   console.log("\n");
   
-  // דוגמה 3: התאמת מנה לפי אלרגיות
-  console.log("דוגמה 3: התאמת פנקייק לאלרגי חלב");
-  console.log(getSafeRecipeAlternative("פנקייק", ["חלב"]));
+  // Example 3: Adapting a dish according to allergies
+  console.log("Example 3: Adapting pancakes for dairy allergy");
+  console.log(getSafeRecipeAlternative("pancake", ["dairy"]));
   console.log("\n");
   
-  // דוגמה 4: המלצת מנות בטוחות על סמך אלרגיות
-  console.log("דוגמה 4: מנות מומלצות לאלרגי גלוטן ואגוזים");
-  console.log(getSafeDishSuggestions(["גלוטן", "אגוזים"]));
+  // Example 4: Suggesting safe dishes based on allergies
+  console.log("Example 4: Recommended dishes for gluten and nut allergies");
+  console.log(getSafeDishSuggestions(["gluten", "nuts"]));
 }
 
-// הפעלת הדגמה
+// Run demonstration
 // demonstrateMCPUsage();
 
-// ייצוא הפונקציות לשימוש חיצוני
+// Export functions for external use
 module.exports = {
   getAllergensFromDish,
   getAllergenAlternatives,
