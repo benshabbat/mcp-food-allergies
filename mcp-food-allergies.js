@@ -129,13 +129,47 @@ const dishesDatabase = {
   }
 };
 
-// Function that returns a list of allergens from a specific dish
+// Helper function to check if an allergen exists in the database
+function isAllergenValid(allergen) {
+  return allergensDatabase.hasOwnProperty(allergen);
+}
+
+// Helper function to check if a dish exists in the database
+function isDishValid(dishName) {
+  return dishesDatabase.hasOwnProperty(dishName);
+}
+
+// Function to list all dishes containing a specific allergen
+function getDishesWithAllergen(allergen) {
+  if (!isAllergenValid(allergen)) {
+    return { success: false, message: `Allergen ${allergen} not found in the database` };
+  }
+
+  const dishesWithAllergen = Object.entries(dishesDatabase)
+    .filter(([_, dishInfo]) => dishInfo.ingredients.includes(allergen))
+    .map(([dishName, dishInfo]) => ({
+      dishName,
+      category: dishInfo.category,
+      difficulty: dishInfo.difficulty
+    }));
+
+  return {
+    success: true,
+    allergen: allergen,
+    dishes: dishesWithAllergen,
+    message: dishesWithAllergen.length > 0
+      ? `Found ${dishesWithAllergen.length} dishes containing ${allergen}`
+      : `No dishes found containing ${allergen}`
+  };
+}
+
+// Improved error handling in existing functions
 function getAllergensFromDish(dishName) {
-  const dish = dishesDatabase[dishName];
-  if (!dish) {
+  if (!isDishValid(dishName)) {
     return { success: false, message: `Dish ${dishName} not found in the database` };
   }
-  
+
+  const dish = dishesDatabase[dishName];
   return {
     success: true,
     dishName: dishName,
@@ -145,13 +179,12 @@ function getAllergensFromDish(dishName) {
   };
 }
 
-// Function that suggests alternatives to a specific allergen
 function getAllergenAlternatives(allergen) {
-  const allergenInfo = allergensDatabase[allergen];
-  if (!allergenInfo) {
+  if (!isAllergenValid(allergen)) {
     return { success: false, message: `Allergen ${allergen} not found in the database` };
   }
-  
+
+  const allergenInfo = allergensDatabase[allergen];
   return {
     success: true,
     allergen: allergen,
@@ -258,26 +291,26 @@ function getSafeDishSuggestions(allergies) {
   };
 }
 
-// Demonstrating MCP system usage
+// Demonstrating MCP system usage with new functionality
 function demonstrateMCPUsage() {
-  // Example 1: Getting allergen information for a dish
   console.log("Example 1: Allergens in pancakes");
   console.log(getAllergensFromDish("pancake"));
   console.log("\n");
-  
-  // Example 2: Getting alternatives for a specific allergen
+
   console.log("Example 2: Alternatives for cow milk");
   console.log(getAllergenAlternatives("cow milk"));
   console.log("\n");
-  
-  // Example 3: Adapting a dish according to allergies
+
   console.log("Example 3: Adapting pancakes for dairy allergy");
   console.log(getSafeRecipeAlternative("pancake", ["dairy"]));
   console.log("\n");
-  
-  // Example 4: Suggesting safe dishes based on allergies
+
   console.log("Example 4: Recommended dishes for gluten and nut allergies");
   console.log(getSafeDishSuggestions(["gluten", "nuts"]));
+  console.log("\n");
+
+  console.log("Example 5: Dishes containing peanuts");
+  console.log(getDishesWithAllergen("peanuts"));
 }
 
 // Run demonstration
@@ -289,6 +322,7 @@ module.exports = {
   getAllergenAlternatives,
   getSafeRecipeAlternative,
   getSafeDishSuggestions,
+  getDishesWithAllergen,
   allergensDatabase,
   dishesDatabase
 };

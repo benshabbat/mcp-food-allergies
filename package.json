@@ -1,0 +1,12 @@
+{
+  "name": "mcp-food-allergies",
+  "version": "1.0.0",
+  "description": "MCP System for Food Allergen Substitutions - A tool to help people with food allergies find safe alternatives to allergenic ingredients.",
+  "main": "mcp-food-allergies.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
