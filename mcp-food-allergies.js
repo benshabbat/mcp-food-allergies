@@ -3,7 +3,7 @@
 
 // Database of common allergens and recommended substitutions
 const allergensDatabase = {
-  // Protein-based allergens
+  // Dairy-based allergens
   "cow milk": {
     category: "dairy",
     alternatives: ["almond milk", "soy milk", "coconut milk", "oat milk", "rice milk"],
@@ -22,7 +22,7 @@ const allergensDatabase = {
     proteinContent: "medium",
     notes: "Coconut yogurt is suitable for sweet dishes, soy yogurt is better for savory dishes"
   },
-  
+
   // Gluten-based allergens
   "wheat flour": {
     category: "gluten",
@@ -42,7 +42,7 @@ const allergensDatabase = {
     proteinContent: "medium",
     notes: "Quinoa is a good alternative in terms of texture and nutritional value"
   },
-  
+
   // Nut-based allergens
   "peanuts": {
     category: "nuts",
@@ -56,7 +56,13 @@ const allergensDatabase = {
     proteinContent: "high",
     notes: "Ground oats can be a good alternative to the texture of almond powder in baking"
   },
-  
+  "cashews": {
+    category: "nuts",
+    alternatives: ["sunflower seeds", "pumpkin seeds", "tahini"],
+    proteinContent: "high",
+    notes: "Tahini can provide a similar creamy texture in spreads and sauces"
+  },
+
   // Soy-based allergens
   "soy": {
     category: "legumes",
@@ -64,68 +70,165 @@ const allergensDatabase = {
     proteinContent: "high",
     notes: "Chickpea tofu (bufu) is a good alternative to regular tofu for those allergic to soy"
   },
-  
+
   // Egg-based allergens
   "eggs": {
     category: "eggs",
     alternatives: ["commercial egg replacer", "ground flax seeds + water", "mashed banana", "tahini + water", "applesauce", "aquafaba (chickpea water)"],
     proteinContent: "high",
     notes: "For baking: 1/4 cup applesauce or mashed banana = 1 egg; for binding: 1 tbsp flax seeds + 3 tbsp water = 1 egg"
+  },
+
+  // Fish-based allergens
+  "fish": {
+    category: "fish",
+    alternatives: ["tofu", "jackfruit", "eggplant", "zucchini"],
+    proteinContent: "high",
+    notes: "Jackfruit and tofu are good substitutes for texture in savory dishes"
+  },
+
+  // Sesame-based allergens
+  "tahini": {
+    category: "seeds",
+    alternatives: ["sunflower seed butter", "pumpkin seed butter", "almond butter"],
+    proteinContent: "medium",
+    notes: "Sunflower seed butter is a great alternative for spreads and dressings"
+  },
+
+  // Additional allergens
+  "honey": {
+    category: "sweeteners",
+    alternatives: ["maple syrup", "date syrup", "agave syrup"],
+    proteinContent: "low",
+    notes: "Date syrup is a great natural sweetener for desserts and drinks"
+  },
+  "mustard": {
+    category: "spices",
+    alternatives: ["horseradish", "wasabi", "dijon-free mustard"],
+    proteinContent: "low",
+    notes: "Horseradish can provide a similar spicy kick in recipes"
+  },
+  "corn": {
+    category: "grains",
+    alternatives: ["rice", "quinoa", "buckwheat"],
+    proteinContent: "medium",
+    notes: "Rice and quinoa are versatile substitutes for corn in many dishes"
+  },
+  "gelatin": {
+    category: "animal-based",
+    alternatives: ["agar-agar", "pectin", "vegan gelatin"],
+    proteinContent: "low",
+    notes: "Agar-agar is a plant-based alternative for desserts and jellies"
+  },
+  "coconut": {
+    category: "nuts",
+    alternatives: ["almond milk", "soy milk", "oat milk"],
+    proteinContent: "medium",
+    notes: "Almond milk is a versatile substitute for coconut milk in recipes"
   }
 };
 
 // Database of common dishes and the allergens they contain
 const dishesDatabase = {
+  // Breakfast dishes
   "pancake": {
     ingredients: ["wheat flour", "eggs", "cow milk"],
-    category: "baked goods",
-    difficulty: "easy"
-  },
-  "alfredo pasta": {
-    ingredients: ["pasta", "cow milk", "cheese"],
-    category: "main course",
-    difficulty: "medium"
-  },
-  "chocolate cake": {
-    ingredients: ["wheat flour", "eggs", "cow milk"],
-    category: "desserts",
-    difficulty: "medium"
-  },
-  "falafel": {
-    ingredients: ["chickpeas", "peanuts"],
-    category: "main course",
-    difficulty: "medium",
-    notes: "Sometimes contains peanuts or tahini - depends on the recipe"
-  },
-  "muesli": {
-    ingredients: ["oats", "cow milk", "almonds", "nuts"],
     category: "breakfast",
-    difficulty: "easy"
+    difficulty: "easy",
+    kosher: true
   },
   "omelet": {
     ingredients: ["eggs"],
     category: "breakfast",
-    difficulty: "easy"
+    difficulty: "easy",
+    kosher: true
+  },
+  "muesli": {
+    ingredients: ["oats", "cow milk", "almonds", "nuts"],
+    category: "breakfast",
+    difficulty: "easy",
+    kosher: true
+  },
+
+  // Main course dishes
+  "falafel": {
+    ingredients: ["chickpeas", "peanuts"],
+    category: "main course",
+    difficulty: "medium",
+    kosher: true,
+    notes: "Sometimes contains peanuts or tahini - depends on the recipe"
   },
   "hummus": {
     ingredients: ["chickpeas", "tahini"],
     category: "appetizer",
-    difficulty: "medium"
-  },
-  "cheese pastry": {
-    ingredients: ["wheat flour", "cheese"],
-    category: "baked goods",
-    difficulty: "medium"
-  },
-  "pizza": {
-    ingredients: ["wheat flour", "cheese"],
-    category: "main course",
-    difficulty: "medium"
+    difficulty: "medium",
+    kosher: true
   },
   "couscous": {
     ingredients: ["couscous"],
     category: "main course",
-    difficulty: "medium"
+    difficulty: "medium",
+    kosher: true
+  },
+  "shakshuka": {
+    ingredients: ["eggs", "tomatoes", "onions", "peppers"],
+    category: "main course",
+    difficulty: "easy",
+    kosher: true
+  },
+  "grilled salmon": {
+    ingredients: ["salmon", "lemon", "olive oil", "garlic"],
+    category: "main course",
+    difficulty: "medium",
+    kosher: true
+  },
+
+  // Desserts
+  "chocolate cake": {
+    ingredients: ["wheat flour", "eggs", "cow milk", "cocoa powder"],
+    category: "desserts",
+    difficulty: "medium",
+    kosher: true
+  },
+  "fruit salad": {
+    ingredients: ["apples", "oranges", "bananas", "grapes"],
+    category: "desserts",
+    difficulty: "easy",
+    kosher: true
+  },
+  "coconut macaroons": {
+    ingredients: ["coconut", "sugar", "eggs"],
+    category: "desserts",
+    difficulty: "easy",
+    kosher: true
+  },
+
+  // Snacks
+  "popcorn": {
+    ingredients: ["corn kernels", "salt", "oil"],
+    category: "snacks",
+    difficulty: "easy",
+    kosher: true
+  },
+  "baked potato chips": {
+    ingredients: ["potatoes", "salt", "olive oil"],
+    category: "snacks",
+    difficulty: "easy",
+    kosher: true
+  },
+
+  // Soups
+  "vegetable soup": {
+    ingredients: ["carrots", "celery", "onions", "potatoes", "zucchini"],
+    category: "soups",
+    difficulty: "easy",
+    kosher: true
+  },
+  "lentil soup": {
+    ingredients: ["lentils", "onions", "carrots", "celery", "spices"],
+    category: "soups",
+    difficulty: "easy",
+    kosher: true
   }
 };
 
