@@ -1,9 +1,17 @@
+const express = require("express");
+const bodyParser = require("body-parser");
 const axios = require("axios");
 const {
   getAllergensFromDish,
   getAllergenAlternatives,
   getSafeDishSuggestions
 } = require("./functions");
+
+const app = express();
+const port = 3000;
+
+// Middleware to parse JSON requests
+app.use(bodyParser.json());
 
 // Claude API key and URL configuration
 const CLAUDE_API_KEY = "YOUR_CLAUDE_API_KEY"; // Replace with your Claude API key
@@ -61,10 +69,18 @@ async function chatWithMCP(userInput) {
   return response;
 }
 
-// Example conversation
-(async () => {
-  const userQuestion = "What are the allergens in pancake?";
-  const answer = await chatWithMCP(userQuestion);
-  console.log("User:", userQuestion);
-  console.log("MCP:", answer);
-})();
+// API endpoint to handle chat requests
+app.post("/chat", async (req, res) => {
+  const userInput = req.body.userInput;
+  if (!userInput) {
+    return res.status(400).json({ error: "userInput is required" });
+  }
+
+  const answer = await chatWithMCP(userInput);
+  res.json({ answer });
+});
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is running at http://localhost:${port}`);
+});
