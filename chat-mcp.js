@@ -101,27 +101,6 @@ app.post("/chat", async (req, res) => {
   res.json({ answer });
 });
 
-// GitHub API key and URL configuration
-const GITHUB_TOKEN = "ghp_YourTokenHere"; // Replace with your GitHub token
-const GITHUB_API_URL = "https://api.github.com";
-
-// Function to fetch repositories from GitHub
-async function getRepositories() {
-  try {
-    const response = await axios.get(`${GITHUB_API_URL}/user/repos`, {
-      headers: {
-        Authorization: `token ${GITHUB_TOKEN}`,
-      },
-    });
-
-    console.log("Repositories:", response.data);
-  } catch (error) {
-    console.error("Error fetching repositories:", error.message);
-  }
-}
-
-getRepositories();
-
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
