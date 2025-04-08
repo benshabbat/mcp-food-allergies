@@ -1,5 +1,9 @@
 const axios = require("axios");
-const mcp = require("./mcp-food-allergies");
+const {
+  getAllergensFromDish,
+  getAllergenAlternatives,
+  getSafeDishSuggestions
+} = require("./functions");
 
 // Claude API key and URL configuration
 const CLAUDE_API_KEY = "YOUR_CLAUDE_API_KEY"; // Replace with your Claude API key
@@ -37,17 +41,17 @@ async function chatWithMCP(userInput) {
   // Check if the user is asking about allergens in a dish
   if (userInput.includes("allergens in")) {
     const dishName = userInput.split("allergens in")[1].trim();
-    response = mcp.getAllergensFromDish(dishName);
+    response = getAllergensFromDish(dishName);
 
   // Check if the user is asking for alternatives to a specific allergen
   } else if (userInput.includes("alternatives for")) {
     const allergen = userInput.split("alternatives for")[1].trim();
-    response = mcp.getAllergenAlternatives(allergen);
+    response = getAllergenAlternatives(allergen);
 
   // Check if the user is asking for safe dishes based on allergies
   } else if (userInput.includes("safe dishes for")) {
     const allergies = userInput.split("safe dishes for")[1].trim().split(", ");
-    response = mcp.getSafeDishSuggestions(allergies);
+    response = getSafeDishSuggestions(allergies);
 
   // If the question doesn't match, send it to Claude
   } else {
