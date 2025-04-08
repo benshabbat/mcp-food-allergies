@@ -32,10 +32,35 @@ function getAllergenAlternatives(allergen) {
   };
 }
 
+function getSafeRecipeAlternative(dishName, allergies) {
+  if (!isDishValid(dishName)) {
+    return { success: false, message: `Dish ${dishName} not found in the database` };
+  }
+
+  const dish = dishesDatabase[dishName];
+  const problematicIngredients = dish.ingredients.filter(ingredient =>
+    allergies.includes(ingredient)
+  );
+
+  const alternatives = problematicIngredients.reduce((acc, ingredient) => {
+    acc[ingredient] = allergensDatabase[ingredient]?.alternatives || ["No alternatives found"];
+    return acc;
+  }, {});
+
+  return {
+    success: true,
+    dishName,
+    safeToEat: problematicIngredients.length === 0,
+    problematicIngredients,
+    alternatives
+  };
+}
+
 // Add the rest of the functions here...
 
 module.exports = {
   getAllergensFromDish,
-  getAllergenAlternatives
+  getAllergenAlternatives,
+  getSafeRecipeAlternative
   // Export other functions as needed
 };
