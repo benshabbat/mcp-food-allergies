@@ -1,6 +1,18 @@
+const fs = require("fs");
+const path = require("path");
 const allergensDatabase = require("./allergensDatabase");
 const dishesDatabase = require("./dishesDatabase");
 const { isAllergenValid, isDishValid } = require("./helpers");
+
+// Path to the databases
+const dishesDatabasePath = path.join(__dirname, "dishesDatabase.js");
+const allergensDatabasePath = path.join(__dirname, "allergensDatabase.js");
+
+// Helper function to save changes to a database file
+function saveDatabaseToFile(database, filePath, variableName) {
+  const fileContent = `const ${variableName} = ${JSON.stringify(database, null, 2)};\n\nmodule.exports = ${variableName};`;
+  fs.writeFileSync(filePath, fileContent, "utf8");
+}
 
 function getAllergensFromDish(dishName) {
   if (!isDishValid(dishName)) {
@@ -69,6 +81,9 @@ function addDish(dishName, ingredients, category, difficulty, kosher = true) {
     kosher
   };
 
+  // Save the updated database to the file
+  saveDatabaseToFile(dishesDatabase, dishesDatabasePath, "dishesDatabase");
+
   return { success: true, message: `Dish ${dishName} added successfully.` };
 }
 
@@ -84,6 +99,9 @@ function addAllergen(allergenName, category, alternatives, proteinContent, notes
     proteinContent,
     notes
   };
+
+  // Save the updated database to the file
+  saveDatabaseToFile(allergensDatabase, allergensDatabasePath, "allergensDatabase");
 
   return { success: true, message: `Allergen ${allergenName} added successfully.` };
 }
