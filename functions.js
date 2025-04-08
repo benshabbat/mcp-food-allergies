@@ -56,11 +56,42 @@ function getSafeRecipeAlternative(dishName, allergies) {
   };
 }
 
-// Add the rest of the functions here...
+// Function to add a new dish to the dishesDatabase
+function addDish(dishName, ingredients, category, difficulty, kosher = true) {
+  if (dishesDatabase[dishName]) {
+    return { success: false, message: `Dish ${dishName} already exists in the database.` };
+  }
+
+  dishesDatabase[dishName] = {
+    ingredients,
+    category,
+    difficulty,
+    kosher
+  };
+
+  return { success: true, message: `Dish ${dishName} added successfully.` };
+}
+
+// Function to add a new allergen to the allergensDatabase
+function addAllergen(allergenName, category, alternatives, proteinContent, notes = "") {
+  if (allergensDatabase[allergenName]) {
+    return { success: false, message: `Allergen ${allergenName} already exists in the database.` };
+  }
+
+  allergensDatabase[allergenName] = {
+    category,
+    alternatives,
+    proteinContent,
+    notes
+  };
+
+  return { success: true, message: `Allergen ${allergenName} added successfully.` };
+}
 
 module.exports = {
   getAllergensFromDish,
   getAllergenAlternatives,
-  getSafeRecipeAlternative
-  // Export other functions as needed
+  getSafeRecipeAlternative,
+  addDish,
+  addAllergen
 };

@@ -4,7 +4,9 @@ const axios = require("axios");
 const {
   getAllergensFromDish,
   getAllergenAlternatives,
-  getSafeDishSuggestions
+  getSafeRecipeAlternative,
+  addDish,
+  addAllergen
 } = require("./functions");
 
 const app = express();
@@ -42,7 +44,7 @@ async function chatWithClaude(userInput) {
   }
 }
 
-// Function to handle user input and integrate MCP
+// Function to handle user input and integrate MCP with LLM
 async function chatWithMCP(userInput) {
   let response;
 
@@ -56,10 +58,29 @@ async function chatWithMCP(userInput) {
     const allergen = userInput.split("alternatives for")[1].trim();
     response = getAllergenAlternatives(allergen);
 
-  // Check if the user is asking for safe dishes based on allergies
-  } else if (userInput.includes("safe dishes for")) {
-    const allergies = userInput.split("safe dishes for")[1].trim().split(", ");
-    response = getSafeDishSuggestions(allergies);
+  // Check if the user is asking to add a new dish
+  } else if (userInput.includes("add dish")) {
+    const dishDetails = userInput.split("add dish")[1].trim();
+    const [dishName, ingredients, category, difficulty, kosher] = dishDetails.split(", ");
+    response = addDish(
+      dishName,
+      ingredients.split(";"),
+      category,
+      difficulty,
+      kosher === "true"
+    );
+
+  // Check if the user is asking to add a new allergen
+  } else if (userInput.includes("add allergen")) {
+    const allergenDetails = userInput.split("add allergen")[1].trim();
+    const [allergenName, category, alternatives, proteinContent, notes] = allergenDetails.split(", ");
+    response = addAllergen(
+      allergenName,
+      category,
+      alternatives.split(";"),
+      proteinContent,
+      notes
+    );
 
   // If the question doesn't match, send it to Claude
   } else {
